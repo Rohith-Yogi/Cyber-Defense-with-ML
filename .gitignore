@@ -1,8 +1,15 @@
 .DS_Store
-defender/deep-malware-detection/raw/
-defender/deep-malware-detection/data/
-defender/deep-malware-detection/.ipynb_checkpoints/
-defender/deep-malware-detection/misc/
+defender/defender/deepMalwareDetectionCore/raw/
+defender/defender/deepMalwareDetectionCore/data/
+defender/defender/deepMalwareDetectionCore/.ipynb_checkpoints/
+defender/defender/deepMalwareDetectionCore/misc/
+defender/defender/deepMalwareDetectionCore/assets
+integrate/assets/NFS_21_ALL_hash_50000_WITH_MLSEC20.pkl
+integrate/pipeline/deepMalwareDetectionCore/raw/
+integrate/pipeline/deepMalwareDetectionCore/data/
+integrate/pipeline/deepMalwareDetectionCore/.ipynb_checkpoints/
+integrate/pipeline/deepMalwareDetectionCore/misc/
+integrate/pipeline/deepMalwareDetectionCore/assets
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

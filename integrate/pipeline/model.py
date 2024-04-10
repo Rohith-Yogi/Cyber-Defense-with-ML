@@ -1,12 +1,13 @@
 from pipeline.nfs.nfs import Model as Nfs
-from pipeline.deepMalwareDetectionCore.src.deepMalwareDetectionFunc.test import deepMalwareDetection
+from pipeline.deepMalwareDetectionCore.src.deepMalwareDetectionFunc.test import Model as deepMalwareDetection
 import numpy as np
 
 
 class Model:
     def __init__(self):
         self.models = [
-            Nfs()
+            Nfs(),
+            deepMalwareDetection()
         ]
 
     def predict_threshold(self, bytez, threshold=0.8) -> int:
