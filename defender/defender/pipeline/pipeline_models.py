@@ -1,4 +1,5 @@
 from defender.defender.nfs.nfs import Model as NfsModel
+from defender.defender.deepMalwareDetectionCore.src.deepMalwareDetectionFunc.test import deepMalwareDetection
 from collections import Counter
 
 
@@ -18,3 +19,5 @@ class Model:
             return 1
 
         return 0
+
+deepMalwareDetection()
