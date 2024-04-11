@@ -413,11 +413,11 @@ class NeedForSpeedModel():
 
     def predict_proba(self, test_data):
         # extract features
-        # test_features = self._extract_features(test_data)
-        if self.transformer is None:
-            test_features = self._extract_features(test_data)
-        else:
-            test_features = self.transformer.transform(self._extract_features(test_data))
+        test_features = self._extract_features(test_data)
+        # if self.transformer is None:
+        #     test_features = self._extract_features(test_data)
+        # else:
+        #     test_features = self.transformer.transform(self._extract_features(test_data))
 
         # print("Predicting classes (proba)...", flush=True)
         # predict features
@@ -472,6 +472,8 @@ class Model:
         test_data = [extracted_attributes]
         test_data = pd.DataFrame(test_data)
         test_data = test_data[(test_data["label"] == 1) | (test_data["label"] == 0)]
-        y_pred = self.clf.predict_threshold(test_data, threshold)[0]
-
+        # y_pred = self.clf.predict_threshold(test_data, threshold)[0]
+        y_pred = self.clf.predict_proba(test_data)
+        y_pred = y_pred[0][1]
+        print(y_pred)
         return y_pred

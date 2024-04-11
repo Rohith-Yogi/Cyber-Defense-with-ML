@@ -8,7 +8,7 @@ from gevent.pywsgi import WSGIServer
 
 app = Flask(__name__)
 app.config['model'] = Model()
-THRESHOLD = 0.8
+THRESHOLD = 0.5
 
 @app.route('/test', methods=['GET'])
 def test():
