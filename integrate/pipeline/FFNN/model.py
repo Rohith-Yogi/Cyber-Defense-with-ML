@@ -393,63 +393,86 @@ class MyModel():
         )
         self.model.fit(x_train, y_train, validation_data=(x_test, y_test), steps_per_epoch=steps_per_epoch, epochs=epochs, callbacks=[model_checkpoint_callback])
         self.model.save('./pipeline/FFNN/saves_model/num_features_' + str(self.apifeature_dims) + '/final_model.h5')
-if __name__ == '__main__':
-    if args.train:
-      feat_estm = FeatureEstimator()
-      num_f = feat_estm.num_features_estimator(int(args.train[2]))
-      model = MyModel(apifeature_dims=int(num_f))
-      model.train(epochs=100, batch_size=64)
-    elif args.test:
-      with open('./pipeline/FFNN/saves_model/len_feat_space.obj', 'rb') as lf_file:
-        len_feat_space = pickle.load(lf_file)
-      num_f = min(int(args.test[1]), len_feat_space) if int(args.test[1]) > 0 else len_feat_space
-      model_file = './pipeline/FFNN/saves_model/num_features_' + str(num_f) + '/best_model.h5'
-      if os.path.exists(model_file):
-        model = load_model(model_file)
-        feature_space_path = './pipeline/FFNN/saves_model/num_features_' + str(num_f) + '/feature_space.obj'
-        if os.path.exists(feature_space_path):
-          with open(feature_space_path, 'rb') as feature_space_file:
-            feature_space = pickle.load(feature_space_file)
-        else:
-          print('!!!LOADABLE FEATURE SPACE FILE NOT FOUND!!!')
-          exit(0)
+# if __name__ == '__main__':
+#     if args.train:
+#       feat_estm = FeatureEstimator()
+#       num_f = feat_estm.num_features_estimator(int(args.train[2]))
+#       model = MyModel(apifeature_dims=int(num_f))
+#       model.train(epochs=100, batch_size=64)
+#     elif args.test:
+#       with open('./pipeline/FFNN/saves_model/len_feat_space.obj', 'rb') as lf_file:
+#         len_feat_space = pickle.load(lf_file)
+#       num_f = min(int(args.test[1]), len_feat_space) if int(args.test[1]) > 0 else len_feat_space
+#       model_file = './pipeline/FFNN/saves_model/num_features_' + str(num_f) + '/best_model.h5'
+#       if os.path.exists(model_file):
+#         model = load_model(model_file)
+#         feature_space_path = './pipeline/FFNN/saves_model/num_features_' + str(num_f) + '/feature_space.obj'
+#         if os.path.exists(feature_space_path):
+#           with open(feature_space_path, 'rb') as feature_space_file:
+#             feature_space = pickle.load(feature_space_file)
+#         else:
+#           print('!!!LOADABLE FEATURE SPACE FILE NOT FOUND!!!')
+#           exit(0)
         
-        if os.path.exists('./pipeline/FFNN/saves_model/dict_feat.obj'):
-          with open('./pipeline/FFNN/saves_model/dict_feat.obj', 'rb') as df_file:
-            dict_feat_space = pickle.load(df_file)
-        else:
-          print('!!!LOADABLE DICT FEATURE SPACE FILE NOT FOUND!!!')
-          exit(0)
-      else:
-        print('!!!MODEL TO BE TESTED DOES NOT EXIST!!!')
-        exit(0)
+#         if os.path.exists('./pipeline/FFNN/saves_model/dict_feat.obj'):
+#           with open('./pipeline/FFNN/saves_model/dict_feat.obj', 'rb') as df_file:
+#             dict_feat_space = pickle.load(df_file)
+#         else:
+#           print('!!!LOADABLE DICT FEATURE SPACE FILE NOT FOUND!!!')
+#           exit(0)
+#       else:
+#         print('!!!MODEL TO BE TESTED DOES NOT EXIST!!!')
+#         exit(0)
       
-      input_file = args.test[0]
-      x_test = []
-      feat_ext = FeatureExtractor()
-      data = feat_ext.feature_extractor_file(input_file)
-      for _dict in data:
-        feature_vector = dict.fromkeys(feature_space, 0)
-        for key in _dict:
-          value = _dict[key]
-          features = value.split()
-          for feature in features:
-            if feature in feature_space:
-              feature_vector[feature] = 1
-        values = list(feature_vector.values())    
-        x_test.append(values)
+#       input_file = args.test[0]
+#       x_test = []
+#       feat_ext = FeatureExtractor()
+#       data = feat_ext.feature_extractor_file(input_file)
+#       for _dict in data:
+#         feature_vector = dict.fromkeys(feature_space, 0)
+#         for key in _dict:
+#           value = _dict[key]
+#           features = value.split()
+#           for feature in features:
+#             if feature in feature_space:
+#               feature_vector[feature] = 1
+#         values = list(feature_vector.values())    
+#         x_test.append(values)
       
-      x_test = np.asarray(x_test)
-      y_pred = model.predict(x_test)
-      y_pred = int(y_pred[0][0]>0.5)
-      # print(y_pred)
-      if y_pred == 1:
-        print(f"\nTest Sample Result: {y_pred} (Malware)\n")
-      else:
-        print(f"\nTest Sample Result: {y_pred} (Goodware)\n")
+#       x_test = np.asarray(x_test)
+#       y_pred = model.predict(x_test)
+#       y_pred = int(y_pred[0][0]>0.5)
+#       # print(y_pred)
+#       if y_pred == 1:
+#         print(f"\nTest Sample Result: {y_pred} (Malware)\n")
+#       else:
+#         print(f"\nTest Sample Result: {y_pred} (Goodware)\n")
 
 
 class Model:
+  def __init__(self):
+        num_f = 1500
+        model_file = 'pipeline/FFNN/saves_model/num_features_' + str(num_f) + '/best_model.h5'
+        if os.path.exists(model_file):
+          self.model = load_model(model_file)
+          feature_space_path = 'pipeline/FFNN/saves_model/num_features_' + str(num_f) + '/feature_space.obj'
+          if os.path.exists(feature_space_path):
+            with open(feature_space_path, 'rb') as feature_space_file:
+              self.feature_space = pickle.load(feature_space_file)
+          else:
+            print('!!!LOADABLE FEATURE SPACE FILE NOT FOUND!!!')
+            exit(0)
+          
+          # if os.path.exists('pipeline/FFNN/saves_model/dict_feat.obj'):
+          #   with open('pipeline/FFNN/saves_model/dict_feat.obj', 'rb') as df_file:
+          #     dict_feat_space = pickle.load(df_file)
+          # else:
+          #   print('!!!LOADABLE DICT FEATURE SPACE FILE NOT FOUND!!!')
+          #   exit(0)
+        else:
+          print('!!!MODEL TO BE TESTED DOES NOT EXIST!!!')
+          exit(0)
+
   def predict_threshold(self, bytez, threshold=0.8):
       # pe_att_ext = PEAttributeExtractor(bytez)
       # extracted_attributes = pe_att_ext.extract()
@@ -458,29 +481,9 @@ class Model:
       # test_data = test_data[(test_data["label"] == 1) | (test_data["label"] == 0)]
       # y_pred = self.clf.predict_threshold(test_data, threshold)[0]
 
-      with open('/workspaces/Cyber-Defense-with-ML/integrate/pipeline/FFNN/saves_model/len_feat_space.obj', 'rb') as lf_file:
-        len_feat_space = pickle.load(lf_file)
-      num_f = 1500
-      model_file = '/workspaces/Cyber-Defense-with-ML/integrate/pipeline/FFNN/saves_model/num_features_' + str(num_f) + '/best_model.h5'
-      if os.path.exists(model_file):
-        model = load_model(model_file)
-        feature_space_path = '/workspaces/Cyber-Defense-with-ML/integrate/pipeline/FFNN/saves_model/num_features_' + str(num_f) + '/feature_space.obj'
-        if os.path.exists(feature_space_path):
-          with open(feature_space_path, 'rb') as feature_space_file:
-            feature_space = pickle.load(feature_space_file)
-        else:
-          print('!!!LOADABLE FEATURE SPACE FILE NOT FOUND!!!')
-          exit(0)
-        
-        if os.path.exists('/workspaces/Cyber-Defense-with-ML/integrate/pipeline/FFNN/saves_model/dict_feat.obj'):
-          with open('/workspaces/Cyber-Defense-with-ML/integrate/pipeline/FFNN/saves_model/dict_feat.obj', 'rb') as df_file:
-            dict_feat_space = pickle.load(df_file)
-        else:
-          print('!!!LOADABLE DICT FEATURE SPACE FILE NOT FOUND!!!')
-          exit(0)
-      else:
-        print('!!!MODEL TO BE TESTED DOES NOT EXIST!!!')
-        exit(0)
+      # with open('pipeline/FFNN/saves_model/len_feat_space.obj', 'rb') as lf_file:
+      #   len_feat_space = pickle.load(lf_file)
+      
       
       with open('temp.dll', 'wb') as f:
             f.write(bytez)
@@ -489,18 +492,18 @@ class Model:
       feat_ext = FeatureExtractor()
       data = feat_ext.feature_extractor_file(input_file)
       for _dict in data:
-        feature_vector = dict.fromkeys(feature_space, 0)
+        feature_vector = dict.fromkeys(self.feature_space, 0)
         for key in _dict:
           value = _dict[key]
           features = value.split()
           for feature in features:
-            if feature in feature_space:
+            if feature in self.feature_space:
               feature_vector[feature] = 1
         values = list(feature_vector.values())    
         x_test.append(values)
       
       x_test = np.asarray(x_test)
-      y_pred = model.predict(x_test)
+      y_pred = self.model.predict(x_test)
       # y_pred = int(y_pred[0][0]>=.5)
       y_pred = y_pred[0][0]
       print(y_pred)

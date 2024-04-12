@@ -5,7 +5,6 @@ import os
 import sys
 import gzip
 import pandas as pd
-# imports
 import _pickle as cPickle
 from scipy import sparse
 from sklearn.preprocessing import OneHotEncoder
@@ -475,5 +474,6 @@ class Model:
         # y_pred = self.clf.predict_threshold(test_data, threshold)[0]
         y_pred = self.clf.predict_proba(test_data)
         y_pred = y_pred[0][1]
+        print("NFS : ")
         print(y_pred)
         return y_pred
