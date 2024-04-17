@@ -1,6 +1,7 @@
 from pipeline.nfs.nfs import Model as Nfs
 from pipeline.deepMalwareDetectionCore.src.deepMalwareDetectionFunc.test import MalConvPlus_model as MalConvPlus_model
 from pipeline.deepMalwareDetectionCore.src.deepMalwareDetectionFunc.test import MalConvBase_model as MalConvBase_model
+from pipeline.deepMalwareDetectionCore.src.deepMalwareDetectionFunc.test import AttentionRCNN_model as AttentionRCNN_model
 from pipeline.FFNN.model import Model as FFNN
 import numpy as np
 
@@ -11,6 +12,7 @@ class Model:
             Nfs(),
             MalConvPlus_model(),
             MalConvBase_model(),
+            AttentionRCNN_model(),
             FFNN()
         ]
 
