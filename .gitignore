@@ -10,6 +10,7 @@ integrate/pipeline/deepMalwareDetectionCore/data/
 integrate/pipeline/deepMalwareDetectionCore/.ipynb_checkpoints/
 integrate/pipeline/deepMalwareDetectionCore/misc/
 integrate/pipeline/deepMalwareDetectionCore/assets
+integrate/test-data/*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
