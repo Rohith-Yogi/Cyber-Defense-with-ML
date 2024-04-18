@@ -485,8 +485,8 @@ class Model:
       #   len_feat_space = pickle.load(lf_file)
       
       
-      with open('temp.dll', 'wb') as f:
-            f.write(bytez)
+      # with open('temp.dll', 'wb') as f:
+      #       f.write(bytez)
       input_file = 'temp.dll'
       x_test = []
       feat_ext = FeatureExtractor()

@@ -25,7 +25,7 @@ import numpy as np
 class Model:
     def __init__(self):
         self.models = [
-            Nfs(),
+            # Nfs(),
             MalConvPlus_model(),
             MalConvBase_model(),
             AttentionRCNN_model(),

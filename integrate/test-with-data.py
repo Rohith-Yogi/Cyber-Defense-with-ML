@@ -1,3 +1,4 @@
+import re
 import time
 import zipfile
 from typing import Tuple, Union, Dict
@@ -8,20 +9,36 @@ import requests as rq
 from pipeline.model import Model
 from pipeline.nfs.nfs import NeedForSpeedModel
 
+
 def stats(results: Dict[str, int]) -> Tuple[float, int]:
-    acc = (sum([1 for value in results.values() if value == 1]) / len(results)) * 100
+    acc = (sum([1 for value in results.values() if value == 1]) / (len(results) + 1e-8)) * 100
     defaults = sum([1 for value in results.values() if value == -1])
 
     return acc, defaults
 
 
 def pretty_print(results: Dict[str, int], goodware: bool=True) -> None:
-    acc, defaults = stats(results)
-
     if goodware:
-        acc = 100 - acc
+        groups = set([re.search(r'gw(\d+)', key).group(0) for key in results])
+    else:
+        groups = set([re.search(r'mw(\d+)', key).group(0) for key in results])
 
-    print(f'{"benign" if goodware else "malware"} | Accuracy: {acc:.2f}% | Defaults: {defaults} | #samples: {len(results)}')
+
+    for group in groups:
+        sample = {
+            key: value for key, value in results.items() if f'/{group}/' in key
+        }
+
+        acc, defaults = stats(sample)
+
+        if goodware:
+            acc = 100 - acc
+
+        print(
+            f'{"benign" if goodware else "malware"} | group: {group} | Accuracy: {acc:.2f}% | Defaults: {defaults} | #samples: {len(sample)}')
+
+
+
 
 
 if __name__ == '__main__':
@@ -30,7 +47,7 @@ if __name__ == '__main__':
 
     results = {}
     password = b'infected'
-    sample_size = 1000000000
+    sample_size = 100000
     model = Model()
     threshold = 0.6
     online = False
@@ -41,7 +58,6 @@ if __name__ == '__main__':
                 if (not info.is_dir()) and sample_size > 0:
 
                     try:
-
                         if not online:
                             content = f.read(info.filename, pwd=b'infected')
                             results[info.filename] = model.predict_threshold(content, threshold)
@@ -80,6 +96,4 @@ if __name__ == '__main__':
 
     g_acc = pretty_print(goodware_results, True)
     m_acc = pretty_print(malware_results, False)
-
-
 
