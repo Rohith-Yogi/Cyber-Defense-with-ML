@@ -27,7 +27,7 @@ class Model:
         self.models = [
             # Nfs(),
             MalConvPlus_model(),
-            MalConvBase_model(),
+            # MalConvBase_model(),
             AttentionRCNN_model(),
             FFNN(),
         ]
@@ -43,4 +43,4 @@ class Model:
 # if __name__ == '__main__':
 #     model = Model()
 
-# deepMalwareDetection()
+# deepMalwareDetection()l
